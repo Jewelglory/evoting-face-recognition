@@ -1,0 +1,74 @@
+{% extends '../components/admin_layout.html' %} {% block content %}
+
+<div class="container-fluid p-5">
+  <h2 class="title-md mb-5">Candidates</h2>
+
+  <div class="card">
+    <div class="card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Party</th>
+            <th>Constituency</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for data in candidates %}
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{data.name}}</td>
+            <td>{{data.party.title}}</td>
+            <td>{{data.constituency.title}}</td>
+            <td>
+              {%if data.status == 1%}
+              <a
+                href="/admin/candidate/status/{{data.id}}"
+                class="btn btn-warning bg-gradient btn-sm"
+                >Deactivate</a
+              >
+              {%else%}
+              <a
+                href="/admin/candidate/status/{{data.id}}"
+                class="btn btn-success bg-gradient btn-sm"
+                >Activate</a
+              >
+              {%endif%}
+              <a
+              href="{% url 'candidate_view' type=data.id %}"
+              class="btn btn-info bg-gradient btn-sm"
+              >Edit</a>
+
+              <a href="{% url 'candidate_delete' id=data.id %}"
+              class="btn btn-danger bg-gradient btn-sm"
+              onclick="return confirm('Are you sure you want to delete this candidate?');"
+              >Delete</a
+            >
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+<!-- Floating Action Button -->
+<a class="fab" href="{% url 'candidate_view' type='Add' %}">
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width="16"
+    height="16"
+    fill="currentColor"
+    class="bi bi-plus-lg"
+    viewBox="0 0 16 16"
+  >
+    <path
+      fill-rule="evenodd"
+      d="M8 2a.5.5 0 0 1 .5.5v5h5a.5.5 0 0 1 0 1h-5v5a.5.5 0 0 1-1 0v-5h-5a.5.5 0 0 1 0-1h5v-5A.5.5 0 0 1 8 2"
+    />
+  </svg>
+</a>
+
+{% endblock %}

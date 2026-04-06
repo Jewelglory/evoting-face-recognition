@@ -1,0 +1,28 @@
+
+{% extends '../components/admin_layout.html' %}
+{% block content %}
+    <div class="container">
+      
+        <form action="/user/vote/" class="card p-4 my-5" method="POST">
+           
+            {% for data in candidates_list %}
+            <div class="card px-5 my-2">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div class="d-flex align-items-center flex-row">
+                            <img src="/media/{{data.details.image}}" class="vote-image me-3" />
+                            <div>
+                                <h4 class="vote-name">{{data.details.name}}</h4>
+                                <p class="vote-party">{{data.details.party.title}}</p>
+                                <span class="badge rounded-pill text-bg-primary">{{data.constituency}}</span>
+                            </div>
+                        </div>
+                        <p>{{data.vote_count}}</p>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </form>
+    </div>
+
+    {% endblock %}

@@ -1,0 +1,108 @@
+{% extends '../components/admin_layout.html' %} {% block content %}
+
+<div class="container">
+  <div class="d-flex justify-content-center my-5">
+    <div class="card w-50 p-3">
+      <div class="card-header bg-white">
+        <h4>{{action}} Candidate</h4>
+      </div>
+      <form
+        action="{% url 'candidate_view' type=type %}"
+        method="POST"
+        class="card-body"
+        onsubmit="return validate_registration('{{action}}')"
+        enctype="multipart/form-data"
+      >
+      <input
+          type="hidden"
+          name="id"
+          id="id"
+          value="{{ candidate.id|default:'' }}"
+        />
+        <input
+          type="text"
+          name="name"
+          id="name"
+          class="form-control mb-3"
+          placeholder="Full Name"
+          autocomplete="off"
+          value="{{ candidate.name|default:'' }}"
+        />
+
+        <label>Date of Birth</label>
+        <input type="date" name="dob" id="dob" class="form-control mb-3"
+          value="{{ candidate.dob|default:'' }}"
+        />
+
+        <label>Select Party</label>
+        <select
+          class="form-select mb-3"
+          name="party"
+          aria-label="Default select example"
+        >
+          {% for opt in party_list %}
+          <option value="{{opt.id}}"  {% if candidate and candidate.party_id == opt.id %}selected{% endif %}>{{opt.title}}</option>
+          {% endfor %}
+        </select>
+
+        <label>Select Constituency</label>
+        <select
+          class="form-select mb-3"
+          name="constituency"
+          aria-label="Default select example"
+        >
+          {% for opt in constituency_list %}
+          <option value="{{opt.id}}" {% if candidate and candidate.constituency_id == opt.id %}selected{% endif %}>{{opt.title}}</option>
+          {% endfor %}
+        </select>
+
+        <label>Upload Image</label>
+        <input
+          type="file"
+          accept="image/*"
+          name="image"
+          id="image"
+          class="form-control mb-3"
+        />
+
+        <button type="submit" class="btn btn-primary bg-gradient">Save</button>
+      </form>
+    </div>
+  </div>
+</div>
+
+{% if success %}
+<script type="text/javascript">
+  alert({ success });
+</script>
+{% endif %} {% if error %}
+<script type="text/javascript">
+  alert({ error });
+</script>
+{% endif %}
+
+<script type="text/javascript">
+  function validate_registration(type) {
+    var name = document.getElementById("name").value;
+    var dob = document.getElementById("dob").value;
+    var image = document.getElementById("image").value;
+    var reg = /\S+@\S+\.\S+/;
+
+    if (name == "") {
+      alert("Please Enter Name");
+      return false;
+    }
+    if (dob == "") {
+      alert("Please Enter DOB");
+      return false;
+    }
+    if (image == "" && type=='Add') {
+      alert("Please upload Image");
+      return false;
+    }
+
+    return true;
+  }
+</script>
+
+{% endblock %}

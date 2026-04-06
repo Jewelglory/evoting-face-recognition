@@ -1,0 +1,176 @@
+{% extends '../components/admin_layout.html' %} {% block content %}
+
+<div class="p-5">
+  <h2 class="title-md mb-5">Users</h2>
+
+  <div class="card">
+    <div class="card-body">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Name</th>
+            <th>Voter Id</th>
+            <th>Contact no</th>
+            <th>Constituency</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for data in users %}
+          <tr>
+            <td>{{forloop.counter}}</td>
+            <td>{{data.name}}</td>
+            <td>{{data.voter_id}}</td>
+            <td>{{data.phone}}</td>
+            <td>{{data.constituency.title}}</td>
+            <td>
+              {%if data.status == 1%}
+              <a
+                href="/admin/user/status/{{data.id}}"
+                class="btn btn-warning bg-gradient btn-sm"
+                >Deactivate</a
+              >
+              {%else%}
+              <a
+                href="/admin/user/status/{{data.id}}"
+                class="btn btn-success bg-gradient btn-sm"
+                >Activate</a
+              >
+              {%endif%}
+
+              <button
+                type="button"
+                class="btn btn-info bg-gradient btn-sm"
+                onclick="editUser('{{data.phone}}','{{data.email}}','{{data.id}}')"
+              >
+                Edit
+              </button>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="staticBackdrop"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <form id="update-user-form" class="modal-content">
+      {% csrf_token %}
+      <div class="modal-header">
+        <h1 class="modal-title fs-5" id="staticBackdropLabel">Modal title</h1>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body d-flex flex-column gap-2">
+        <input type="hidden" name="id" id="id" />
+        <div>
+          <label for="phone">Contact No</label>
+          <input
+            class="form-control"
+            type="tel"
+            name="phone"
+            id="phone"
+            placeholder="Contact No"
+            required
+          />
+        </div>
+        <div>
+          <label for="email">Email Address</label>
+          <input
+            class="form-control"
+            type="email"
+            name="email"
+            id="email"
+            placeholder="Email Address"
+            required
+          />
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
+        <button type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </form>
+  </div>
+</div>
+
+<script type="text/javascript">
+  function editUser(phone, email, id) {
+    document.getElementById("id").value = id;
+    document.getElementById("email").value = email;
+    document.getElementById("phone").value = phone;
+
+    const myModal = new bootstrap.Modal("#staticBackdrop", {
+      keyboard: false,
+    });
+
+    myModal.show();
+  }
+
+  document
+    .getElementById("update-user-form")
+    .addEventListener("submit", function (event) {
+      event.preventDefault(); // Prevent normal form submission
+
+      // Get email and phone values
+      const email = document.getElementById("email").value;
+      const phone = document.getElementById("phone").value;
+
+      // Email regex for basic validation
+      const emailRegex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+      const phoneRegex = /^\+?1?\d{9,15}$/; // Regex for phone number validation
+
+      // Validate email format
+      if (!emailRegex.test(email)) {
+        alert("Please enter a valid email address.");
+        return false;
+      }
+
+      // Validate phone number format
+      if (!phoneRegex.test(phone)) {
+        alert("Please enter a valid phone number.");
+        return false;
+      }
+      const formData = new FormData(this);
+
+      fetch("/admin/user/update/", {
+        method: "POST",
+        body: formData,
+        headers: {
+          "X-CSRFToken": formData.get("csrfmiddlewaretoken"), // Ensure CSRF token is sent
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            alert(data.message); // Show success message
+            // Close the modal or reload the page if necessary
+            window.location.reload(); // Example: refresh the page
+          } else {
+            alert(data.message); // Show error message
+          }
+        })
+        .catch((error) => {
+          console.error("Error:", error);
+        });
+    });
+</script>
+{% endblock %}

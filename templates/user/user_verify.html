@@ -1,0 +1,34 @@
+
+    {% extends '../components/user_layout.html' %}
+
+    {% block content %}
+
+    <div class="container">
+        <div class="d-flex justify-content-center my-5">
+            <div class="card w-50 p-5">
+                <h3 class="card-title text-center">Your Age is <span class="text-primary">{{user_age}}</span></h3>
+                <!-- <p class="card-text text-center">procedure for user verification</p> -->
+
+                {% if is_eligible %}
+                <form action="/user/verify/" method="POST" class="mt-4">
+                    <button type="submit" class="btn btn-primary w-100">Verify</button>
+                </form>
+                {% else %}
+                <div class="alert alert-danger text-center mt-4" role="alert">
+                    You are not Eligible to vote
+                </div>
+                {% endif %}
+
+                {% if user_verified %}
+                    {% if user_found == 0 %}
+                    <div class="alert alert-danger text-center mt-4" role="alert">
+                        Unknown User
+                    </div>
+                    {% endif %}
+                {% endif %}
+                
+            </div>
+        </div>
+    </div>
+
+    {% endblock %}

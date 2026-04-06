@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    {% include 'include/header.html' %}
+    <style>
+      .about-section {
+        background-color: #f9f9f9;
+        padding: 50px 0;
+      }
+      .about-text {
+        font-size: 1.1rem;
+        line-height: 1.6;
+      }
+      .team-member {
+        border: 1px solid #ddd;
+        border-radius: 10px;
+        padding: 20px;
+        text-align: center;
+      }
+      .team-member img {
+        border-radius: 50%;
+        width: 120px;
+        height: 120px;
+        object-fit: cover;
+      }
+      .team-member h5 {
+        margin-top: 15px;
+        font-weight: bold;
+      }
+    </style>
+  </head>
+  {% load static %}
+
+  <body>
+    {% comment %} NavBar {% endcomment %}
+    <nav class="navbar navbar-expand-lg navbar-dark bg-primary py-3">
+      <div class="container-fluid">
+        <a class="navbar-brand ms-4" href="/">E-Voting</a>
+        <div class="collapse navbar-collapse" id="navbarSupportedContent">
+          <ul class="navbar-nav ms-auto me-4 mb-2 mb-lg-0">
+            <li class="nav-item">
+              <a class="nav-link mx-2" aria-current="page" href="/admin/login/"
+                >Admin</a
+              >
+            </li>
+            <li class="nav-item">
+              <a class="nav-link mx-2" aria-current="page" href="/user/login/"
+                >User</a
+              >
+            </li>
+            <li class="nav-item">
+              <a
+                class="nav-link mx-2"
+                aria-current="page"
+                href="{% url 'about' %}"
+                >About</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+    <section class="about-section text-center">
+      <div class="container">
+        <h2>About Secure Voting System</h2>
+        <p class="about-text">
+          Welcome to the Secure Voting System, an advanced platform designed to make voting more secure, accessible, and efficient through cutting-edge face recognition technology.
+        </p>
+        <h3>What We Do</h3>
+        <p class="about-text">
+          Our system ensures a seamless and tamper-proof voting experience by verifying voters' identities using face recognition. It eliminates the risk of voter fraud and enhances the integrity of the electoral process.
+        </p>
+        <h3>How to Use the Application</h3>
+        <ol class="about-text">
+          <li><div style="text-align: left;"><b>Register Your Account</b>:Provide your personal details</div></li>
+          <li><div style="text-align: left;"><b>Login to Your Account</b>:Use your registered phone number to receive otp.</div></li>
+          <li><div style="text-align: left;"><b>Verify Your Identity</b>:The system will use your camera to scan your face and confirm your identity. Ensure good lighting and a clear view of your face..</li>
+          <li><div style="text-align: left;"><b>Select an Election</b>:Browse the list of available elections and choose the one you want to participate in.</div></li>
+          <li><div style="text-align: left;"><b>Cast Your Vote</b>:Review the list of candidates, select your choice, and submit your vote.</div></li>
+          <li><div style="text-align: left;"><b>Receive Confirmation</b>:A confirmation message will appear once your vote is successfully recorded.</div></li>
+        </ol>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-light text-center py-3">
+      <p>&copy; 2024 Secure Voting System | All rights reserved</p>
+    </footer>
+  </body>
+</html>
